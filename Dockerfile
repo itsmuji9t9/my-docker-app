@@ -7,6 +7,9 @@ WORKDIR /app
 # 3. Apne computer se app.py file ko container ke andar copy karein
 COPY app.py .
 
+# Yeh line Flask install karegi container ke andar
+RUN pip install flask
+
 # 4. Container ka port 8080 open karein taake internet se traffic aa sake
 EXPOSE 8080
 
