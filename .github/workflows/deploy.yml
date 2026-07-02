@@ -1,0 +1,31 @@
+name: CI to Docker Hub
+
+# 1. GitHub ko bataya ke jab bhi main code 'main' branch par push karoon, yeh pipeline chalao
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      # Step A: GitHub ke server par aapka code download karna
+      - name: Check out the code
+        uses: actions/checkout@v3
+
+      # Step B: Docker Hub par login karna (Tijori se username/token utha kar)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Step C: Image banana aur Docker Hub par automatic PUSH karna
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          # tags mein automatic aapka username lag jayega aur image ka naam 'my-python-app' banega
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
