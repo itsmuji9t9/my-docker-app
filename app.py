@@ -140,4 +140,4 @@ def home():
 
 if __name__ == "__main__":
     # Runs on port 8080 locally
-    app.run(host="0.0.0.0", port=808080808080808080)
+    app.run(host="0.0.0.0", port=8080)

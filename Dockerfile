@@ -8,7 +8,7 @@ WORKDIR /app
 COPY app.py .
 
 # 4. Container ka port 8080 open karein taake internet se traffic aa sake
-EXPOSE 80
+EXPOSE 8080
 
 # 5. Container start hote hi jo command chalani hai
 CMD ["python", "app.py"]
