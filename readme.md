@@ -39,14 +39,6 @@ You should see the live Python application running smoothly on your local machin
 Once you are done testing, you can stop and clean up the container using:
 docker rm -f my-running-app
 
----
-
-### 📂 Portion 2 (Cloud Workflow & Production Configuration)
-*Ab terminal mein cursor ko bilkul end par le kar aayein aur is bache hue hisse ko uske niche paste kar dein:*
-
-```markdown
----
-
 ## 🏗️ How the Automated Cloud Workflow Works (CI/CD)
 
 When code is pushed to the `main` branch, the pipeline triggers automatically:
