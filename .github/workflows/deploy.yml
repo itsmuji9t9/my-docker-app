@@ -1,6 +1,6 @@
 name: CI to Docker Hub
 
-# 1. GitHub ko bataya ke jab bhi main code 'main' branch par push karoon, yeh pipeline chalao
+# 1. GitHub ko bataya ke jab bhi main code 'main' branch par push karoon, yeh pipeline chalao ok! 
 on:
   push:
     branches: [ main ]
