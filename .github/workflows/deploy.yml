@@ -44,4 +44,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
             
             # 3. Naya container port 8080 par chala do
-            docker run -d -p 80:80 --name my-running-app ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+            docker run -d -p 80:8080 --name my-running-app ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
