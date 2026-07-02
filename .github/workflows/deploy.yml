@@ -1,6 +1,5 @@
-name: CI to Docker Hub
+name: CI/CD to AWS EC2
 
-# 1. GitHub ko bataya ke jab bhi main code 'main' branch par push karoon, yeh pipeline chalao ok! 
 on:
   push:
     branches: [ main ]
@@ -9,23 +8,40 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      # Step A: GitHub ke server par aapka code download karna
       - name: Check out the code
         uses: actions/checkout@v3
 
-      # Step B: Docker Hub par login karna (Tijori se username/token utha kar)
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Step C: Image banana aur Docker Hub par automatic PUSH karna
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
           push: true
-          # tags mein automatic aapka username lag jayega aur image ka naam 'my-python-app' banega
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+
+  deploy-to-ec2:
+    runs-on: ubuntu-latest
+    # Yeh job tabhi chalegi jab upar wali build-and-push successful ho jayegi
+    needs: build-and-push
+    steps:
+      - name: SSH into EC2 and Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. Agar pehle se koi container chal raha hai toh use remove karo
+            docker rm -f my-running-app || true
+            
+            # 2. Docker Hub se bilkul naya image pull karo
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
+            
+            # 3. Naya container port 8080 par chala do
+            docker run -d -p 80:80 --name my-running-app ${{ secrets.DOCKERHUB_USERNAME }}/my-python-app:latest
